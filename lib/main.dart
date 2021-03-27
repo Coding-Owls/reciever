@@ -6,11 +6,24 @@ import 'package:beacons_plugin/beacons_plugin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:splash_screen_view/SplashScreenView.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+  ));
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+      home: SplashScreenView(
+    home: MyApp(),text: "Beaconer",
+    textStyle: TextStyle(fontSize: 25),
+    textType: TextType.TyperAnimatedText,
+    imageSrc: "assets/logo.png",
+    imageSize: 400,
+    duration: 4000,)));
 }
 
 class MyApp extends StatefulWidget {
@@ -19,7 +32,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _beaconResult = 'Not Scanned Yet.';
+  String _beaconResult = "Not Scanned Yet";
   int _nrMessaggesReceived = 0;
   var isRunning = false;
 
@@ -97,25 +110,35 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: const Text('Monitoring Beacons'),
+          backgroundColor: Colors.brown,
         ),
         body: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              if(_beaconResult!="Not Scanned Yet.")
+              
+              Image.asset("assets/logonew.png", height: 300, width: 300,),
+              
+              if(_beaconResult!="Not Scanned Yet")
               FutureBuilder(
                 future: FirebaseFirestore.instance.collection("Messages").doc(jsonDecode(_beaconResult)['uuid']).get(),
                 builder: (context, snapshot){
                   if(snapshot.connectionState == ConnectionState.done && snapshot.hasData){
-                    return Text(snapshot.data['val']);
+                    return Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text(snapshot.data['val'], style: TextStyle(fontSize: 20),),
+                    );
                   }
                   return Center(child: Container(width: 50, height: 50, child: CircularProgressIndicator(),),);
                 },
+              ),
+              if(_beaconResult=="Not Scanned Yet")  Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(_beaconResult, style: TextStyle(fontSize: 20),),
               ),
               Padding(
                 padding: EdgeInsets.all(10.0),
@@ -129,22 +152,23 @@ class _MyAppState extends State<MyApp> {
               ),
               Visibility(
                 child: RaisedButton(
+                  color: Colors.brown,
                   onPressed: () async {
                     initPlatformState();
                     await BeaconsPlugin.startMonitoring;
-
                     setState(() {
                       isRunning = true;
                     });
 
                   },
-                  child: Text('Start Scanning', style: TextStyle(fontSize: 20)),
+                  padding: EdgeInsets.all(12),
+                  child: Text('Start Scanning', style: TextStyle(fontSize: 20, color: Colors.white)),
                 ),
               )
             ],
           ),
         ),
-      ),
+
     );
   }
 }

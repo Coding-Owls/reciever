@@ -31,6 +31,8 @@ dependencies:
   beacons_plugin: ^1.0.20
   firebase_core:
   cloud_firestore:
+  splash_screen_view: ^1.0.1
+  wave:
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +48,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
