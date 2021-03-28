@@ -40,7 +40,7 @@
 
      $ git push origin <branch_name> 
 
-### Credits goes to these people:✨
+### Made with <img src = "https://www.flaticon.com/svg/vstatic/svg/1216/1216649.svg?token=exp=1616922360~hmac=04cff1b699c89a1e3841b3d306548735" height = 15, width = 15> by:
 <table>
 	<tr>
 		<td>
